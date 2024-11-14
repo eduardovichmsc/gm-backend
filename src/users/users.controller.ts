@@ -3,6 +3,8 @@ import { UsersService } from './users.service';
 import { UserRegisterDto } from './dto/user-register.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { Role } from 'src/auth/role.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @Controller('users')
 export class UsersController {
@@ -27,7 +29,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @Role('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   async getUserById(@Param('id') id: number) {
     return this.usersService.getUserById(id);
   }

@@ -3,13 +3,10 @@ import {
   HttpStatus,
   Injectable,
   UnauthorizedException,
-  UseGuards,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from 'src/auth/jwt/jwt.service';
-import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
-// import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
@@ -20,6 +17,13 @@ export class UsersService {
 
   async register(email: string, password: string) {
     try {
+      const existingUser = await this.prisma.user.findUnique({
+        where: { email: email },
+      });
+      if (existingUser) {
+        throw new Error('User with this email already exists');
+      }
+
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = this.prisma.user.create({
         data: { email, password: hashedPassword },
@@ -37,7 +41,7 @@ export class UsersService {
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (user && (await bcrypt.compare(password, user.password))) {
-      const token = await this.jwtService.generateToken(user.id, user.email);
+      const token = this.jwtService.generateToken(user.id, user.email);
 
       return {
         status: 200,
@@ -62,7 +66,6 @@ export class UsersService {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
   async getUserById(userId: number) {
     try {
       return this.prisma.user.findUnique({
