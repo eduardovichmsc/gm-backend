@@ -8,33 +8,59 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  role String @default("user")
-  
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  role     String @default("user")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Order     Order[]
 }
 
-model Product {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String?
-  price       Float
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
 model Order {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  total     Float
-  
+  id     Int   @id @default(autoincrement())
+  userId Int
+  total  Float
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id])
+}
+
+model Product {
+  id             Int          @id @default(autoincrement())
+  name           String
+  description    String
+  price          Float
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  categoryId     Int
+  subCategoryId  Int?
+  category       Category     @relation(fields: [categoryId], references: [id])
+  subCategory    SubCategory? @relation(fields: [subCategoryId], references: [id])
+  manufacturerId Int
+  manufacturer   Manufacturer @relation(fields: [manufacturerId], references: [id])
+}
+
+model Category {
+  id          Int           @id @default(autoincrement())
+  name        String
+  products    Product[]
+  SubCategory SubCategory[]
+}
+
+model SubCategory {
+  id         Int       @id @default(autoincrement())
+  name       String
+  categoryId Int
+  category   Category  @relation(fields: [categoryId], references: [id])
+  products   Product[]
+}
+
+model Manufacturer {
+  id       Int       @id @default(autoincrement())
+  name     String
+  products Product[]
 }
