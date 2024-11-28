@@ -30,27 +30,46 @@ export class ProductsService {
     }
   }
 
-  async findAll(page: number = 1, limit: number = 6) {
+  async find(
+    page: number = 1,
+    limit: number = 6,
+    manufacturerId?: number,
+    categoryId?: number,
+    search?: string,
+  ) {
     try {
       const skip = (page - 1) * limit;
+
+      const where: any = {};
+      if (manufacturerId) where.manufacturerId = manufacturerId;
+      if (categoryId) where.categoryId = categoryId;
+      if (search) {
+        where.OR = [
+          { name: { contains: search, mode: 'insensitive' } },
+          { description: { contains: search, mode: 'insensitive' } },
+        ];
+      }
+
       const [products, total] = await this.prisma.$transaction([
         this.prisma.product.findMany({
-          skip: skip,
+          where,
+          skip,
           take: limit,
         }),
-        this.prisma.product.count(),
+        this.prisma.product.count({ where }),
       ]);
+
       return {
-        list: products,
         limit,
         total,
         currentPage: page,
         totalPages: Math.ceil(total / limit),
+        list: products,
       };
     } catch (error) {
       console.error(error);
       throw new HttpException(
-        "Couldn't FIND_ANY products",
+        "Couldn't FILTER products",
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -65,8 +84,6 @@ export class ProductsService {
       const product = await this.prisma.product.findUnique({
         where: { id: +id },
       });
-
-      console.log(product);
 
       if (!product) {
         throw new HttpException(
@@ -101,44 +118,6 @@ export class ProductsService {
       console.error(error);
       throw new HttpException(
         "Couldn't UPDATE product by id " + id,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-  }
-
-  async findWithFilters(
-    page: number = 1,
-    limit: number = 6,
-    manufacturerId?: number,
-    categoryId?: number,
-  ) {
-    try {
-      const skip = (page - 1) * limit;
-
-      const where: any = {};
-      if (manufacturerId) where.manufacturerId = manufacturerId;
-      if (categoryId) where.categoryId = categoryId;
-
-      const [products, total] = await this.prisma.$transaction([
-        this.prisma.product.findMany({
-          where,
-          skip,
-          take: limit,
-        }),
-        this.prisma.product.count({ where }),
-      ]);
-
-      return {
-        list: products,
-        limit,
-        total,
-        currentPage: page,
-        totalPages: Math.ceil(total / limit),
-      };
-    } catch (error) {
-      console.error(error);
-      throw new HttpException(
-        "Couldn't FILTER products",
         HttpStatus.BAD_REQUEST,
       );
     }

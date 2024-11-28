@@ -25,8 +25,8 @@ import { extname } from 'path';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Role('admin')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Role('admin')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
@@ -48,28 +48,25 @@ export class ProductsController {
   }
 
   @Get()
-  async findAll() {
-    return this.productsService.findAll();
-  }
-
-  @Get('filter')
   async findWithFilters(
     @Query('page') page: number,
     @Query('limit') limit: number,
     @Query('manufacturerId') manufacturerId?: number,
     @Query('categoryId') categoryId?: number,
+    @Query('search') search?: string,
   ) {
-    return this.productsService.findWithFilters(
+    return this.productsService.find(
       +page || 1,
-      +limit || 6,
+      +limit || 9,
       manufacturerId ? +manufacturerId : undefined,
       categoryId ? +categoryId : undefined,
+      search || undefined,
     );
   }
 
   @Get(':id')
   async findOneById(@Param('id') id: number) {
-    return this.productsService.findOneById(id);
+    return this.productsService.findOneById(+id);
   }
 
   @Role('admin')
