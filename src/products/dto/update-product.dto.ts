@@ -25,4 +25,8 @@ export class UpdateProductDto {
   @IsOptional()
   @IsNumber()
   manufacturerId?: number;
+
+  @IsOptional()
+  @IsString()
+  image?: string;
 }

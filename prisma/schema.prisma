@@ -30,37 +30,43 @@ model Order {
 }
 
 model Product {
-  id             Int          @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   name           String
   description    String
   price          Float
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  image          String?
   categoryId     Int
   subCategoryId  Int?
-  category       Category     @relation(fields: [categoryId], references: [id])
-  subCategory    SubCategory? @relation(fields: [subCategoryId], references: [id])
+  // category       Category     @relation(fields: [categoryId], references: [id])
+  // subCategory    SubCategory? @relation(fields: [subCategoryId], references: [id])
   manufacturerId Int
-  manufacturer   Manufacturer @relation(fields: [manufacturerId], references: [id])
+  // manufacturer   Manufacturer @relation(fields: [manufacturerId], references: [id])
 }
 
 model Category {
-  id          Int           @id @default(autoincrement())
-  name        String
-  products    Product[]
+  id       Int     @id @default(autoincrement())
+  name     String
+  tag      String  @unique
+  isActive Boolean @default(true)
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
+  // products    Product[]
   SubCategory SubCategory[]
 }
 
 model SubCategory {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   name       String
   categoryId Int
-  category   Category  @relation(fields: [categoryId], references: [id])
-  products   Product[]
+  category   Category @relation(fields: [categoryId], references: [id])
+  // products   Product[]
 }
 
 model Manufacturer {
-  id       Int       @id @default(autoincrement())
-  name     String
-  products Product[]
+  id   Int    @id @default(autoincrement())
+  name String
+  // products Product[]
 }

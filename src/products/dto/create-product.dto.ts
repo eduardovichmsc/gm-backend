@@ -24,4 +24,8 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsNumber()
   manufacturerId: number;
+
+  @IsOptional()
+  @IsString()
+  image?: string;
 }

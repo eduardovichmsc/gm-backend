@@ -13,10 +13,11 @@ export class ProductsService {
         data: {
           name: createProductDto.name,
           description: createProductDto.description,
-          price: createProductDto.price,
-          categoryId: createProductDto.categoryId,
-          subCategoryId: createProductDto.subCategoryId,
-          manufacturerId: createProductDto.manufacturerId,
+          price: +createProductDto.price,
+          categoryId: +createProductDto.categoryId,
+          subCategoryId: +createProductDto.subCategoryId,
+          manufacturerId: +createProductDto.manufacturerId,
+          image: createProductDto.image,
         },
       });
       return newProduct;
@@ -29,10 +30,23 @@ export class ProductsService {
     }
   }
 
-  async findAll() {
+  async findAll(page: number = 1, limit: number = 6) {
     try {
-      const products = await this.prisma.product.findMany();
-      return products;
+      const skip = (page - 1) * limit;
+      const [products, total] = await this.prisma.$transaction([
+        this.prisma.product.findMany({
+          skip: skip,
+          take: limit,
+        }),
+        this.prisma.product.count(),
+      ]);
+      return {
+        list: products,
+        limit,
+        total,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+      };
     } catch (error) {
       console.error(error);
       throw new HttpException(
@@ -44,11 +58,23 @@ export class ProductsService {
 
   async findOneById(id: number) {
     try {
+      if (!id) {
+        throw new HttpException('ID is required', HttpStatus.BAD_REQUEST);
+      }
+
       const product = await this.prisma.product.findUnique({
-        where: {
-          id: id,
-        },
+        where: { id: +id },
       });
+
+      console.log(product);
+
+      if (!product) {
+        throw new HttpException(
+          `Product with ID ${id} not found`,
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
       return product;
     } catch (error) {
       console.error(error);
@@ -62,14 +88,57 @@ export class ProductsService {
   async update(id: number, updateProductDto: UpdateProductDto) {
     try {
       const updatedProduct = await this.prisma.product.update({
-        where: { id },
-        data: { ...updateProductDto },
+        where: { id: +id },
+        data: {
+          ...updateProductDto,
+          price: +updateProductDto.price,
+          categoryId: +updateProductDto.categoryId,
+          manufacturerId: +updateProductDto.manufacturerId,
+        },
       });
       return updatedProduct;
     } catch (error) {
       console.error(error);
       throw new HttpException(
         "Couldn't UPDATE product by id " + id,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async findWithFilters(
+    page: number = 1,
+    limit: number = 6,
+    manufacturerId?: number,
+    categoryId?: number,
+  ) {
+    try {
+      const skip = (page - 1) * limit;
+
+      const where: any = {};
+      if (manufacturerId) where.manufacturerId = manufacturerId;
+      if (categoryId) where.categoryId = categoryId;
+
+      const [products, total] = await this.prisma.$transaction([
+        this.prisma.product.findMany({
+          where,
+          skip,
+          take: limit,
+        }),
+        this.prisma.product.count({ where }),
+      ]);
+
+      return {
+        list: products,
+        limit,
+        total,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+      };
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        "Couldn't FILTER products",
         HttpStatus.BAD_REQUEST,
       );
     }

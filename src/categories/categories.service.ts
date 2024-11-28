@@ -9,7 +9,7 @@ export class CategoriesService {
   async create(createCategoryDto: CreateCategoryDto) {
     try {
       const newCategory = await this.prisma.category.create({
-        data: { name: createCategoryDto.name },
+        data: { name: createCategoryDto.name, tag: createCategoryDto.tag },
       });
       return newCategory;
     } catch (error) {
