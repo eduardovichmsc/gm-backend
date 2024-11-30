@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserRegisterDto } from './dto/user-register.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -19,8 +27,16 @@ export class UsersController {
   }
 
   @Post('login')
-  async login(@Body() userLoginDto: UserLoginDto) {
-    return this.usersService.login(userLoginDto.email, userLoginDto.password);
+  async login(
+    @Body() userLoginDto: UserLoginDto,
+    @Res({ passthrough: true }) response,
+  ) {
+    const token = await this.usersService.login(
+      userLoginDto.email,
+      userLoginDto.password,
+    );
+    response.header('access-token', token);
+    return { message: 'Login successful' };
   }
 
   @Get()

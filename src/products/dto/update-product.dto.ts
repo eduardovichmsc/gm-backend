@@ -27,6 +27,10 @@ export class UpdateProductDto {
   manufacturerId?: number;
 
   @IsOptional()
+  @IsNumber()
+  countryId: number;
+
+  @IsOptional()
   @IsString()
   image?: string;
 }

@@ -25,6 +25,10 @@ export class CreateProductDto {
   @IsNumber()
   manufacturerId: number;
 
+  @IsNotEmpty()
+  @IsNumber()
+  countryId: number;
+
   @IsOptional()
   @IsString()
   image?: string;

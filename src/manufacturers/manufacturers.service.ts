@@ -32,4 +32,32 @@ export class ManufacturersService {
       );
     }
   }
+
+  async findById(id: number) {
+    try {
+      const manufacturer = await this.prisma.manufacturer.findUnique({
+        where: {
+          id: +id,
+        },
+      });
+      return manufacturer;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException("Coudln't FIND manufacturer by id ", id);
+    }
+  }
+
+  async remove(id: number) {
+    try {
+      const removedManufacturer = await this.prisma.manufacturer.delete({
+        where: {
+          id: +id,
+        },
+      });
+      return removedManufacturer;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException("Couldn't REMOVE manufacturer by id ", id);
+    }
+  }
 }

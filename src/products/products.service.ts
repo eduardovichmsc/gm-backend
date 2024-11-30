@@ -17,6 +17,7 @@ export class ProductsService {
           categoryId: +createProductDto.categoryId,
           subCategoryId: +createProductDto.subCategoryId,
           manufacturerId: +createProductDto.manufacturerId,
+          countryId: +createProductDto.countryId,
           image: createProductDto.image,
         },
       });
@@ -105,12 +106,21 @@ export class ProductsService {
   async update(id: number, updateProductDto: UpdateProductDto) {
     try {
       const updatedProduct = await this.prisma.product.update({
-        where: { id: +id },
+        where: {
+          id: +id,
+        },
         data: {
           ...updateProductDto,
-          price: +updateProductDto.price,
-          categoryId: +updateProductDto.categoryId,
-          manufacturerId: +updateProductDto.manufacturerId,
+          price: updateProductDto.price ? +updateProductDto.price : undefined,
+          categoryId: updateProductDto.categoryId
+            ? +updateProductDto.categoryId
+            : undefined,
+          manufacturerId: updateProductDto.manufacturerId
+            ? +updateProductDto.manufacturerId
+            : undefined,
+          countryId: updateProductDto.countryId
+            ? +updateProductDto.countryId
+            : undefined,
         },
       });
       return updatedProduct;
@@ -126,7 +136,7 @@ export class ProductsService {
   async remove(id: number) {
     try {
       const removedProduct = await this.prisma.product.delete({
-        where: { id },
+        where: { id: +id },
       });
       return removedProduct;
     } catch (error) {

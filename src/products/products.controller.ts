@@ -69,8 +69,8 @@ export class ProductsController {
     return this.productsService.findOneById(+id);
   }
 
-  @Role('admin')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Role('admin')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
   @Put(':id')
   @UseInterceptors(
     FileInterceptor('image', {
@@ -94,8 +94,8 @@ export class ProductsController {
     return this.productsService.update(id, updateProductDto);
   }
 
-  @Role('admin')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Role('admin')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   async remove(@Param('id') id: number) {
     return this.productsService.remove(id);

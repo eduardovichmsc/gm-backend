@@ -15,7 +15,9 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Order     Order[]
+  orders    Order[]
+
+  @@index([email])
 }
 
 model Order {
@@ -39,10 +41,8 @@ model Product {
   image          String?
   categoryId     Int
   subCategoryId  Int?
-  // category       Category     @relation(fields: [categoryId], references: [id])
-  // subCategory    SubCategory? @relation(fields: [subCategoryId], references: [id])
   manufacturerId Int
-  // manufacturer   Manufacturer @relation(fields: [manufacturerId], references: [id])
+  countryId      Int @default(0)
 }
 
 model Category {
@@ -51,22 +51,30 @@ model Category {
   tag      String  @unique
   isActive Boolean @default(true)
 
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt
-  // products    Product[]
-  SubCategory SubCategory[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now()) @updatedAt
+
+  @@index([name])
 }
 
 model SubCategory {
-  id         Int      @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
   name       String
   categoryId Int
-  category   Category @relation(fields: [categoryId], references: [id])
-  // products   Product[]
 }
 
 model Manufacturer {
   id   Int    @id @default(autoincrement())
   name String
-  // products Product[]
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now()) @updatedAt
+}
+
+model Country {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now()) @updatedAt
 }

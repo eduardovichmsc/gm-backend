@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ManufacturersService } from './manufacturers.service';
 import { Role } from 'src/auth/role.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
@@ -18,5 +26,15 @@ export class ManufacturersController {
   @Get()
   async findAll() {
     return this.manufacturersService.findAll();
+  }
+
+  @Get(':id')
+  async findById(@Param('id') id: number) {
+    return this.manufacturersService.findById(id);
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: number) {
+    return this.manufacturersService.remove(id);
   }
 }
