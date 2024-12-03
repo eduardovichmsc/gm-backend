@@ -5,43 +5,43 @@ export declare class CategoriesController {
     private readonly categoriesService;
     constructor(categoriesService: CategoriesService);
     create(createCategoryDto: CreateCategoryDto): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
         name: string;
         tag: string;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
     }>;
     findAll(): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
         name: string;
         tag: string;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
     }[]>;
     findById(id: number): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
         name: string;
         tag: string;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
     }>;
     update(id: number, updateCategoryDto: UpdateCategoryDto): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
         name: string;
         tag: string;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
     }>;
     remove(id: number): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
         name: string;
         tag: string;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
     }>;
 }
