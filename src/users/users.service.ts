@@ -70,7 +70,7 @@ export class UsersService {
     try {
       return this.prisma.user.findUnique({
         where: { id: +userId },
-        select: { email: true, id: true, createdAt: true },
+        select: { email: true, id: true },
       });
     } catch (error) {
       throw new UnauthorizedException(HttpStatus.UNAUTHORIZED);

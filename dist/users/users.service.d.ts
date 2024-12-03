@@ -21,6 +21,5 @@ export declare class UsersService {
     getUserById(userId: number): Promise<{
         id: number;
         email: string;
-        createdAt: Date;
     }>;
 }

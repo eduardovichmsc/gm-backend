@@ -13,6 +13,7 @@ import { UserLoginDto } from './dto/user-login.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { Role } from 'src/auth/role.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { Response } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -29,14 +30,20 @@ export class UsersController {
   @Post('login')
   async login(
     @Body() userLoginDto: UserLoginDto,
-    @Res({ passthrough: true }) response,
+    @Res({ passthrough: true }) response: Response,
   ) {
-    const token = await this.usersService.login(
+    const { token, status, userId } = await this.usersService.login(
       userLoginDto.email,
       userLoginDto.password,
     );
-    response.header('access-token', token);
-    return { message: 'Login successful' };
+
+    response.cookie('Authorization', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+
+    return { token, status, userId };
   }
 
   @Get()
@@ -45,8 +52,6 @@ export class UsersController {
   }
 
   @Get(':id')
-  @Role('admin')
-  @UseGuards(JwtAuthGuard, RolesGuard)
   async getUserById(@Param('id') id: number) {
     return this.usersService.getUserById(id);
   }

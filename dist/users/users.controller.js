@@ -17,9 +17,6 @@ const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const user_register_dto_1 = require("./dto/user-register.dto");
 const user_login_dto_1 = require("./dto/user-login.dto");
-const jwt_auth_guard_1 = require("../auth/jwt/jwt-auth.guard");
-const role_decorator_1 = require("../auth/role.decorator");
-const roles_guard_1 = require("../auth/roles.guard");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -28,9 +25,13 @@ let UsersController = class UsersController {
         return this.usersService.register(userRegisterDto.email, userRegisterDto.password);
     }
     async login(userLoginDto, response) {
-        const token = await this.usersService.login(userLoginDto.email, userLoginDto.password);
-        response.header('access-token', token);
-        return { message: 'Login successful' };
+        const { token, status, userId } = await this.usersService.login(userLoginDto.email, userLoginDto.password);
+        response.cookie('Authorization', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+        });
+        return { token, status, userId };
     }
     async getAllUsers() {
         return this.usersService.getAllUsers();
@@ -63,8 +64,6 @@ __decorate([
 ], UsersController.prototype, "getAllUsers", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    (0, role_decorator_1.Role)('admin'),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
