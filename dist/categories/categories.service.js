@@ -51,6 +51,9 @@ let CategoriesService = class CategoriesService {
                     ...updateCategoryDto,
                 },
             });
+            if (!updateCategoryDto) {
+                throw new common_1.HttpException('Not found category', common_1.HttpStatus.BAD_REQUEST);
+            }
             return updatedCategory;
         }
         catch (error) {

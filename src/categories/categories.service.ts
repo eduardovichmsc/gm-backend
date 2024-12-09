@@ -43,6 +43,10 @@ export class CategoriesService {
           ...updateCategoryDto,
         },
       });
+
+      if (!updateCategoryDto) {
+        throw new HttpException('Not found category', HttpStatus.BAD_REQUEST);
+      }
       return updatedCategory;
     } catch (error) {
       console.error(error);
