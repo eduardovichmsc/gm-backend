@@ -4,33 +4,33 @@ export declare class CountryService {
     private prisma;
     constructor(prisma: PrismaService);
     create(name: string): Promise<{
-        name: string;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
+        name: string;
     }>;
     findAll(): Promise<{
-        name: string;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
+        name: string;
     }[]>;
     findById(id: number): Promise<{
-        name: string;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
+        name: string;
     }>;
     update(id: number, updatedCountyDto: UpdateCountryDto): Promise<{
-        name: string;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
+        name: string;
     }>;
     remove(id: number): Promise<{
-        name: string;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
+        name: string;
     }>;
 }
