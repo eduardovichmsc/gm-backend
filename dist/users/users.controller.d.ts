@@ -1,10 +1,11 @@
 import { UsersService } from './users.service';
 import { UserRegisterDto } from './dto/user-register.dto';
 import { UserLoginDto } from './dto/user-login.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
+    getAuthorizationHeader(req: Request): Promise<any>;
     register(userRegisterDto: UserRegisterDto): Promise<{
         id: number;
         email: string;

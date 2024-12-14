@@ -1,9 +1,11 @@
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from 'src/auth/jwt/jwt.service';
+import { Request } from 'express';
 export declare class UsersService {
     private prisma;
     private jwtService;
     constructor(prisma: PrismaService, jwtService: JwtService);
+    getAuthorizationHeader(req: Request): Promise<any>;
     register(email: string, password: string): Promise<{
         id: number;
         email: string;
@@ -18,7 +20,7 @@ export declare class UsersService {
         id: number;
         email: string;
     }[]>;
-    getUserById(userId: number): Promise<{
+    getUserById(id: number): Promise<{
         id: number;
         email: string;
     }>;

@@ -19,6 +19,12 @@ let UsersService = class UsersService {
         this.prisma = prisma;
         this.jwtService = jwtService;
     }
+    async getAuthorizationHeader(req) {
+        if (req.cookies['Authorization'] === false) {
+            return 0;
+        }
+        return req.cookies['Authorization'];
+    }
     async register(email, password) {
         try {
             const existingUser = await this.prisma.user.findUnique({
@@ -61,10 +67,10 @@ let UsersService = class UsersService {
             throw new common_1.HttpException('Failed to fetch users', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    async getUserById(userId) {
+    async getUserById(id) {
         try {
             return this.prisma.user.findUnique({
-                where: { id: +userId },
+                where: { id: id },
                 select: { email: true, id: true },
             });
         }

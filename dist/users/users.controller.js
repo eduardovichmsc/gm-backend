@@ -21,6 +21,9 @@ let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
     }
+    async getAuthorizationHeader(req) {
+        return this.usersService.getAuthorizationHeader(req);
+    }
     async register(userRegisterDto) {
         return this.usersService.register(userRegisterDto.email, userRegisterDto.password);
     }
@@ -37,10 +40,17 @@ let UsersController = class UsersController {
         return this.usersService.getAllUsers();
     }
     async getUserById(id) {
-        return this.usersService.getUserById(id);
+        return this.usersService.getUserById(+id);
     }
 };
 exports.UsersController = UsersController;
+__decorate([
+    (0, common_1.Get)('getAuth'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getAuthorizationHeader", null);
 __decorate([
     (0, common_1.Post)('register'),
     __param(0, (0, common_1.Body)()),

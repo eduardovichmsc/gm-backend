@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -13,11 +14,16 @@ import { UserLoginDto } from './dto/user-login.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { Role } from 'src/auth/role.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Get('getAuth')
+  async getAuthorizationHeader(@Req() req: Request) {
+    return this.usersService.getAuthorizationHeader(req);
+  }
 
   @Post('register')
   async register(@Body() userRegisterDto: UserRegisterDto) {
@@ -53,6 +59,6 @@ export class UsersController {
 
   @Get(':id')
   async getUserById(@Param('id') id: number) {
-    return this.usersService.getUserById(id);
+    return this.usersService.getUserById(+id);
   }
 }

@@ -7,6 +7,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from 'src/auth/jwt/jwt.service';
+import { Request } from 'express';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +15,13 @@ export class UsersService {
     private prisma: PrismaService,
     private jwtService: JwtService,
   ) {}
+
+  async getAuthorizationHeader(req: Request) {
+    if (req.cookies['Authorization'] === false) {
+      return 0;
+    }
+    return req.cookies['Authorization'];
+  }
 
   async register(email: string, password: string) {
     try {
@@ -66,10 +74,10 @@ export class UsersService {
     }
   }
 
-  async getUserById(userId: number) {
+  async getUserById(id: number) {
     try {
       return this.prisma.user.findUnique({
-        where: { id: +userId },
+        where: { id: id },
         select: { email: true, id: true },
       });
     } catch (error) {
