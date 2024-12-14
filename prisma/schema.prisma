@@ -36,13 +36,14 @@ model Product {
   name           String
   description    String
   price          Float
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  priceTo        Float     @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
   image          String?
   categoryId     Int
   subCategoryId  Int?
   manufacturerId Int
-  countryId      Int @default(0)
+  countryId      Int       @default(0)
 }
 
 model Category {

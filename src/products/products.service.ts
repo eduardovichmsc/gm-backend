@@ -14,6 +14,9 @@ export class ProductsService {
           name: createProductDto.name,
           description: createProductDto.description,
           price: +createProductDto.price,
+          priceTo: createProductDto.priceTo
+            ? +createProductDto.priceTo
+            : +createProductDto.price,
           categoryId: +createProductDto.categoryId,
           subCategoryId: +createProductDto.subCategoryId,
           manufacturerId: +createProductDto.manufacturerId,

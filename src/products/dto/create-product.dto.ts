@@ -15,6 +15,10 @@ export class CreateProductDto {
 
   @IsNotEmpty()
   @IsNumber()
+  priceTo: number;
+
+  @IsNotEmpty()
+  @IsNumber()
   categoryId: number;
 
   @IsOptional()

@@ -8,11 +8,10 @@ export class CountryService {
 
   async create(name: string) {
     try {
-      console.log(name);
-
       const newCountry = await this.prisma.country.create({
         data: { name },
       });
+
       return newCountry;
     } catch (error) {
       console.error(error);

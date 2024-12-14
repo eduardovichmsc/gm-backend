@@ -4,33 +4,33 @@ export declare class CountryController {
     private readonly countryService;
     constructor(countryService: CountryService);
     create(name: any): Promise<{
-        id: number;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
+        id: number;
     }>;
     findAll(): Promise<{
-        id: number;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
+        id: number;
     }[]>;
     findName(id: number): Promise<{
-        id: number;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
+        id: number;
     }>;
     update(id: number, dto: UpdateCountryDto): Promise<{
-        id: number;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
+        id: number;
     }>;
     remove(id: number): Promise<{
-        id: number;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
+        id: number;
     }>;
 }

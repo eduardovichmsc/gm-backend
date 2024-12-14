@@ -11,6 +11,7 @@ export declare class ProductsController {
         name: string;
         description: string;
         price: number;
+        priceTo: number;
         categoryId: number;
         subCategoryId: number | null;
         manufacturerId: number;
@@ -29,6 +30,7 @@ export declare class ProductsController {
             name: string;
             description: string;
             price: number;
+            priceTo: number;
             categoryId: number;
             subCategoryId: number | null;
             manufacturerId: number;
@@ -43,6 +45,7 @@ export declare class ProductsController {
         name: string;
         description: string;
         price: number;
+        priceTo: number;
         categoryId: number;
         subCategoryId: number | null;
         manufacturerId: number;
@@ -56,6 +59,7 @@ export declare class ProductsController {
         name: string;
         description: string;
         price: number;
+        priceTo: number;
         categoryId: number;
         subCategoryId: number | null;
         manufacturerId: number;
@@ -69,6 +73,7 @@ export declare class ProductsController {
         name: string;
         description: string;
         price: number;
+        priceTo: number;
         categoryId: number;
         subCategoryId: number | null;
         manufacturerId: number;

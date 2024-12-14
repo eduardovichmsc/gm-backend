@@ -18,7 +18,6 @@ let CountryService = class CountryService {
     }
     async create(name) {
         try {
-            console.log(name);
             const newCountry = await this.prisma.country.create({
                 data: { name },
             });
