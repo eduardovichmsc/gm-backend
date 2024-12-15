@@ -7,11 +7,10 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.enableCors({
-    origin: process.env.ORIGIN || 'http://localhost:3000',
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
-
-  console.log(process.env.ORIGIN);
 
   await app.listen(5000);
 }
