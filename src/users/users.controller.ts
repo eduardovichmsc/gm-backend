@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Req,
   Res,
   UseGuards,
@@ -57,8 +58,13 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
 
-  @Get(':id')
-  async getUserById(@Param('id') id: number) {
-    return this.usersService.getUserById(+id);
+  @Get(':email')
+  async getUserByEmail(@Param('email') email: string) {
+    return this.usersService.getUserByEmail(email);
+  }
+
+  @Put(':email')
+  async setAdmin(@Param('email') email: string) {
+    return this.usersService.setAdmin(email);
   }
 }

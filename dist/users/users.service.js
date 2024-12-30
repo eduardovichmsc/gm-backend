@@ -60,7 +60,7 @@ let UsersService = class UsersService {
     async getAllUsers() {
         try {
             return this.prisma.user.findMany({
-                select: { id: true, email: true },
+                select: { id: true, email: true, role: true },
             });
         }
         catch (error) {
@@ -73,6 +73,54 @@ let UsersService = class UsersService {
                 where: { id: id },
                 select: { email: true, id: true },
             });
+        }
+        catch (error) {
+            throw new common_1.UnauthorizedException(common_1.HttpStatus.UNAUTHORIZED);
+        }
+    }
+    async getUserByEmail(email) {
+        try {
+            const user = await this.prisma.user.findUnique({
+                where: {
+                    email: email,
+                },
+            });
+            if (!user) {
+                throw new common_1.HttpException("Couldn't find user by email" + email, common_1.HttpStatus.BAD_REQUEST);
+            }
+            console.log(user);
+            return {
+                id: user.id,
+                email: user.email,
+                role: user.role,
+            };
+        }
+        catch (error) {
+            throw new common_1.HttpException('Route error', common_1.HttpStatus.BAD_REQUEST);
+        }
+    }
+    async setAdmin(email) {
+        try {
+            const user = await this.prisma.user.findUnique({
+                where: {
+                    email: email,
+                },
+            });
+            if (user) {
+                try {
+                    return this.prisma.user.update({
+                        where: {
+                            email: email,
+                        },
+                        data: {
+                            role: 'admin',
+                        },
+                    });
+                }
+                catch (error) {
+                    throw new common_1.HttpException("Couldn't update user to ADMIN", common_1.HttpStatus.BAD_REQUEST);
+                }
+            }
         }
         catch (error) {
             throw new common_1.UnauthorizedException(common_1.HttpStatus.UNAUTHORIZED);

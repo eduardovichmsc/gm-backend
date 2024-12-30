@@ -64,7 +64,7 @@ export class UsersService {
   async getAllUsers() {
     try {
       return this.prisma.user.findMany({
-        select: { id: true, email: true },
+        select: { id: true, email: true, role: true },
       });
     } catch (error) {
       throw new HttpException(
@@ -80,6 +80,63 @@ export class UsersService {
         where: { id: id },
         select: { email: true, id: true },
       });
+    } catch (error) {
+      throw new UnauthorizedException(HttpStatus.UNAUTHORIZED);
+    }
+  }
+
+  async getUserByEmail(email: string) {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+      });
+
+      if (!user) {
+        throw new HttpException(
+          "Couldn't find user by email" + email,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      console.log(user);
+
+      return {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      };
+    } catch (error) {
+      throw new HttpException('Route error', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async setAdmin(email: string) {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+      });
+
+      if (user) {
+        try {
+          return this.prisma.user.update({
+            where: {
+              email: email,
+            },
+            data: {
+              role: 'admin',
+            },
+          });
+        } catch (error) {
+          throw new HttpException(
+            "Couldn't update user to ADMIN",
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+      }
     } catch (error) {
       throw new UnauthorizedException(HttpStatus.UNAUTHORIZED);
     }

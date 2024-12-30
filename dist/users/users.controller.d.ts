@@ -18,9 +18,19 @@ export declare class UsersController {
     getAllUsers(): Promise<{
         id: number;
         email: string;
+        role: string;
     }[]>;
-    getUserById(id: number): Promise<{
+    getUserByEmail(email: string): Promise<{
         id: number;
         email: string;
+        role: string;
+    }>;
+    setAdmin(email: string): Promise<{
+        id: number;
+        email: string;
+        password: string;
+        role: string;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
 }

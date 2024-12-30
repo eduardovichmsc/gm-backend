@@ -39,8 +39,11 @@ let UsersController = class UsersController {
     async getAllUsers() {
         return this.usersService.getAllUsers();
     }
-    async getUserById(id) {
-        return this.usersService.getUserById(+id);
+    async getUserByEmail(email) {
+        return this.usersService.getUserByEmail(email);
+    }
+    async setAdmin(email) {
+        return this.usersService.setAdmin(email);
     }
 };
 exports.UsersController = UsersController;
@@ -73,12 +76,19 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getAllUsers", null);
 __decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)(':email'),
+    __param(0, (0, common_1.Param)('email')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "getUserById", null);
+], UsersController.prototype, "getUserByEmail", null);
+__decorate([
+    (0, common_1.Put)(':email'),
+    __param(0, (0, common_1.Param)('email')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "setAdmin", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])
