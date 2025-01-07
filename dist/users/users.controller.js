@@ -31,8 +31,8 @@ let UsersController = class UsersController {
         const { token, status, userId } = await this.usersService.login(userLoginDto.email, userLoginDto.password);
         response.cookie('Authorization', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            sameSite: 'none',
+            maxAge: 60 * 60 * 1000,
         });
         return { token, status, userId };
     }
