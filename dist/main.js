@@ -6,14 +6,14 @@ const fs = require("fs");
 async function bootstrap() {
     const httpsOptions = {
         key: fs.readFileSync('./secrets/privkey.pem'),
-        cert: fs.readFileSync('./secrets/fullchain.pem'),
+        cert: fs.readFileSync('./secrets/cert.pem'),
     };
     const app = await core_1.NestFactory.create(app_module_1.AppModule, { httpsOptions });
     app.enableCors({
         origin: true,
         credentials: true,
     });
-    await app.listen(5000);
+    await app.listen(5000, '0.0.0.0');
 }
 bootstrap();
 //# sourceMappingURL=main.js.map
